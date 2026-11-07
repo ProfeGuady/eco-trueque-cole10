@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#2E7D32" />
+  <meta name="description" content="Eco-Trueque Escolar: sistema interno y 100% anónimo del Colegio N° 10." />
+  <title>Eco-Trueque Escolar | Colegio N° 10</title>
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a href="./index.html" class="brand">
+        <span>🌱 Eco-Trueque</span>
+        <span class="brand-badge">Colegio N° 10</span>
+      </a>
+      <button id="btnInstallPwa" class="btn btn-accent btn-sm" style="display: none;">
+        📲 Instalar App
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Hero Principal -->
+    <section class="hero">
+      <span class="hero-tag">🔒 100% Anónimo · Comunidad Educativa</span>
+      <h1>Eco-Trueque Escolar: ayudarnos entre todos, cuidando el planeta</h1>
+      <p>
+        Red interna solidaria de uniformes, útiles escolares y alimentos del
+        <strong>Colegio N° 10</strong>. Doná lo que ya no usás o pedí lo que
+        necesitás con total reserva y dignidad.
+      </p>
+      <div class="hero-actions">
+        <a href="./app.html?tab=catalogo" class="btn btn-light">
+          👕 Ver catálogo
+        </a>
+        <a href="./app.html?tab=pedir" class="btn btn-accent">
+          🤝 Pedir de forma anónima
+        </a>
+      </div>
+    </section>
+
+    <!-- Pilares del Sistema -->
+    <section class="grid" aria-label="Características del proyecto">
+      <article class="card">
+        <div>
+          <span class="badge badge-uniforme">Privacidad Cero Exposición</span>
+          <h3 style="margin-top: 0.5rem; font-size: 1.05rem;">Anonimato real en ambas puntas</h3>
+          <p style="font-size: 0.88rem; color: var(--texto-sec); margin-top: 0.35rem;">
+            En el catálogo no se publica quién dona, y cuando presionás
+            <strong>"Lo necesito"</strong> tu nombre no aparece en ninguna pantalla.
+          </p>
+        </div>
+      </article>
+
+      <article class="card">
+        <div>
+          <span class="badge badge-utiles">Matemática + Ecología</span>
+          <h3 style="margin-top: 0.5rem; font-size: 1.05rem;">Estadísticas y ahorro textil</h3>
+          <p style="font-size: 0.88rem; color: var(--texto-sec); margin-top: 0.35rem;">
+            Calculamos porcentajes de metas, proporciones por rubro y los kilogramos
+            de fibra textil que evitamos desechar.
+          </p>
+        </div>
+        <a href="./app.html?tab=matematica" class="btn btn-outline btn-sm">
+          📊 Ir al Panel Matemático
+        </a>
+      </article>
+
+      <article class="card">
+        <div>
+          <span class="badge badge-alimentos">Otras necesidades</span>
+          <h3 style="margin-top: 0.5rem; font-size: 1.05rem;">Colectas de alimentos</h3>
+          <p style="font-size: 0.88rem; color: var(--texto-sec); margin-top: 0.35rem;">
+            Casillero solidario para sumar fideos, arroz y alimentos no perecederos
+            con metas claras por curso.
+          </p>
+        </div>
+        <a href="./app.html?tab=colectas" class="btn btn-outline btn-sm">
+          🥫 Ver colectas activas
+        </a>
+      </article>
+    </section>
+
+    <!-- Sección Legado de 5° año para 4° año -->
+    <section class="legacy-section" id="legado">
+      <h2>🎓 Legado de 5° año para 4° año</h2>
+      <p style="font-size: 0.92rem; color: var(--texto-sec);">
+        Este sistema fue diseñado y programado por estudiantes y docentes de
+        <strong>5° año del Colegio N° 10</strong> como un proyecto de Educación
+        Solidaria y Matemática Aplicada. Antes de egresar, entregamos la posta al
+        futuro <strong>4° año</strong> para que el proyecto nunca se detenga.
+      </p>
+
+      <div class="legacy-steps">
+        <div class="legacy-step">
+          <strong>1. Posta de Delegados</strong>
+          <p style="font-size: 0.83rem;">
+            Cada fin de ciclo, 5° año capacita a los delegados de 4° año en la
+            tabla <code>delegados_curso</code> y la entrega reservada de pedidos.
+          </p>
+        </div>
+        <div class="legacy-step">
+          <strong>2. Continuidad Matemática</strong>
+          <p style="font-size: 0.83rem;">
+            4° año hereda las series estadísticas para analizar porcentajes de
+            crecimiento, razones de reutilización y huella ecológica escolar.
+          </p>
+        </div>
+        <div class="legacy-step">
+          <strong>3. Código Abierto Escolar</strong>
+          <p style="font-size: 0.83rem;">
+            Arquitectura modular (<code>db.js</code>, <code>app.js</code>) lista
+            para que las próximas promociones sumen nuevas funciones.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Registro del Service Worker (PWA)
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(() => {});
+      });
+    }
+
+    // Soporte de botón de instalación PWA
+    let deferredPrompt;
+    const btnInstall = document.getElementById('btnInstallPwa');
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      btnInstall.style.display = 'inline-flex';
+    });
+
+    btnInstall?.addEventListener('click', async () => {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      await deferredPrompt.userChoice;
+      deferredPrompt = null;
+      btnInstall.style.display = 'none';
+    });
+  </script>
+</body>
+</html>
+

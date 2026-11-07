@@ -1,0 +1,26 @@
+{
+  "name": "Eco-Trueque Escolar - Colegio N° 10",
+  "short_name": "Eco-Trueque",
+  "description": "Sistema interno y 100% anónimo de trueque solidario, útiles, uniformes y matemática aplicada del Colegio N° 10.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#F9F9F9",
+  "theme_color": "#2E7D32",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='36' fill='%232E7D32'/%3E%3Ccircle cx='96' cy='96' r='60' fill='%23F57C00'/%3E%3Cpath d='M68 98l20 20 38-40' stroke='%23FFFFFF' stroke-width='14' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='96' fill='%232E7D32'/%3E%3Ccircle cx='256' cy='256' r='160' fill='%23F57C00'/%3E%3Cpath d='M180 260l52 52 104-108' stroke='%23FFFFFF' stroke-width='36' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
+

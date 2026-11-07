@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#2E7D32" />
+  <title>Aplicación Eco-Trueque | Colegio N° 10</title>
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a href="./index.html" class="brand">
+        <span>⬅️ Eco-Trueque</span>
+        <span class="brand-badge">Colegio N° 10</span>
+      </a>
+      <span id="dbStatusBadge" class="brand-badge" style="background: rgba(255,255,255,0.2);">
+        Modo Aula
+      </span>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- TAB 1: CATÁLOGO SOLIDARIO (SIN MOSTRAR DONANTE) -->
+    <section id="tab-catalogo" class="tab-panel active" aria-label="Catálogo de artículos">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem;">
+        <div>
+          <h2 style="font-size: 1.25rem; color: var(--verde-oscuro);">Catálogo Solidario</h2>
+          <p style="font-size: 0.83rem; color: var(--texto-sec);">
+            Donado por alumnos y profes del Colegio N° 10. Todas las donaciones son anónimas.
+          </p>
+        </div>
+        <button id="btnAbrirDonar" class="btn btn-primary btn-sm">
+          ➕ Sumar donación
+        </button>
+      </div>
+
+      <div class="filters" role="tablist" aria-label="Filtrar por categoría">
+        <button class="chip active" data-filter="todos">Todos</button>
+        <button class="chip" data-filter="uniforme">👕 Uniformes (Remeras / Pantalones)</button>
+        <button class="chip" data-filter="utiles">✏️ Útiles (Cuadernos / Biromes)</button>
+      </div>
+
+      <div id="catalogoGrid" class="grid"></div>
+    </section>
+
+    <!-- TAB 2: SOLICITUD ANÓNIMA DIRECTA -->
+    <section id="tab-pedir" class="tab-panel" aria-label="Pedir de forma anónima">
+      <h2 style="font-size: 1.25rem; color: var(--verde-oscuro); margin-bottom: 0.4rem;">
+        Solicitud 100% Anónima
+      </h2>
+      <div class="privacy-banner">
+        🔒 <strong>Garantía de Anonimato:</strong> Ningún compañero ni visitante puede ver quién solicita un útil o prenda. El código de usuario y tu curso se guardan únicamente en la base interna para armar tu bolsa reservada.
+      </div>
+
+      <form id="formPedidoLibre" class="card">
+        <div class="form-group">
+          <label for="pedidoItemSelect">¿Qué artículo necesitás?</label>
+          <select id="pedidoItemSelect" class="form-control" required></select>
+        </div>
+
+        <div class="form-group" id="grupoDetalleLibre" style="display: none;">
+          <label for="pedidoDetalleLibre">Escribí qué útil, talle de uniforme o material necesitás:</label>
+          <input
+            type="text"
+            id="pedidoDetalleLibre"
+            class="form-control"
+            placeholder="Ej: Remera talle S, carpeta N°3, hojas cuadriculadas..."
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="pedidoUsuario">Alias o código de alumno (solo para retiro interno):</label>
+          <input
+            type="text"
+            id="pedidoUsuario"
+            class="form-control"
+            placeholder="Ej: Iniciales + últimos 3 del DNI (ej. ML-482)"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="pedidoCurso">Curso (solo para gestión interna):</label>
+          <select id="pedidoCurso" class="form-control" required>
+            <option value="">Seleccionar curso...</option>
+            <option value="1° Año">1° Año</option>
+            <option value="2° Año">2° Año</option>
+            <option value="3° Año">3° Año</option>
+            <option value="4° Año">4° Año</option>
+            <option value="5° Año">5° Año</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-accent btn-block">
+          🤝 Enviar pedido anónimo ("Lo necesito")
+        </button>
+      </form>
+    </section>
+
+    <!-- TAB 3: OTRAS NECESIDADES (COLECTAS DE ALIMENTOS NO PERECEDEROS) -->
+    <section id="tab-colectas" class="tab-panel" aria-label="Colectas de alimentos">
+      <h2 style="font-size: 1.25rem; color: var(--verde-oscuro); margin-bottom: 0.3rem;">
+        Otras Necesidades: Colectas Solidarias
+      </h2>
+      <p style="font-size: 0.85rem; color: var(--texto-sec); margin-bottom: 1rem;">
+        Espacio coordinado por 5° y 4° año para reunir alimentos no perecederos (fideos, arroz, leche) con metas medibles.
+      </p>
+
+      <div id="colectasGrid" class="grid" style="margin-bottom: 1.4rem;"></div>
+
+      <!-- Casillero libre para proponer o sumar otra necesidad de alimentos -->
+      <div class="card">
+        <h3 style="font-size: 1rem; color: var(--verde-oscuro);">
+          📦 Casillero libre: iniciar nueva meta de colecta
+        </h3>
+        <form id="formNuevaColecta" style="margin-top: 0.6rem;">
+          <div class="form-group">
+            <label for="inputAlimentoLibre">Alimento no perecedero o necesidad puntual:</label>
+            <input
+              type="text"
+              id="inputAlimentoLibre"
+              class="form-control"
+              placeholder="Ej: Paquetes de fideos, arroz, lentejas, cacao..."
+              required
+            />
+          </div>
+          <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 0.7rem;">
+            <div class="form-group">
+              <label for="inputMetaLibre">Meta (unidades/kg):</label>
+              <input
+                type="number"
+                id="inputMetaLibre"
+                class="form-control"
+                min="5"
+                value="40"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="inputCursoColecta">Curso impulsor:</label>
+              <input
+                type="text"
+                id="inputCursoColecta"
+                class="form-control"
+                placeholder="Ej: 4° Año / 5° Año"
+                required
+              />
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">
+            🚀 Publicar meta solidaria
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- TAB 4: PANEL MATEMÁTICO (ESTADÍSTICAS, PORCENTAJES Y PROPORCIONES) -->
+    <section id="tab-matematica" class="tab-panel" aria-label="Panel Matemático">
+      <h2 style="font-size: 1.25rem; color: var(--verde-oscuro); margin-bottom: 0.3rem;">
+        📐 Panel Matemático e Impacto Ambiental
+      </h2>
+      <p style="font-size: 0.85rem; color: var(--texto-sec); margin-bottom: 1rem;">
+        Indicadores reales trabajados por 5° año y heredados por 4° año para analizar porcentajes, proporciones y ahorro ecológico.
+      </p>
+
+      <!-- KPIs Principales -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-value" id="kpiReutilizados">0</div>
+          <div class="kpi-label">Útiles y prendas reutilizadas</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-value accent" id="kpiEstudiantes">0</div>
+          <div class="kpi-label">Estudiantes asistidos</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-value" id="kpiTextiles">0 kg</div>
+          <div class="kpi-label">Kg de textiles reciclados</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-value accent" id="kpiPorcentajeAlimentos">0%</div>
+          <div class="kpi-label">Meta global de alimentos</div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <!-- Gráfico 1: Porcentajes y Proporciones por Rubro -->
+        <article class="card">
+          <div>
+            <h3 style="font-size: 1rem; color: var(--verde-oscuro);">
+              1. Proporción y distribución de reutilización
+            </h3>
+            <p style="font-size: 0.8rem; color: var(--texto-sec); margin-bottom: 0.6rem;">
+              Comparativa entre prendas de uniforme y útiles escolares entregados.
+            </p>
+            <div id="chartRubros" class="bar-chart"></div>
+          </div>
+          <div class="math-formula" id="formulaProporcion"></div>
+        </article>
+
+        <!-- Gráfico 2: Cumplimiento porcentual de colectas -->
+        <article class="card">
+          <div>
+            <h3 style="font-size: 1rem; color: var(--verde-oscuro);">
+              2. Porcentaje de avance por meta alimentaria
+            </h3>
+            <p style="font-size: 0.8rem; color: var(--texto-sec); margin-bottom: 0.6rem;">
+              Porcentaje alcanzado respecto a la meta propuesta por los delegados.
+            </p>
+            <div id="chartColectas" class="bar-chart"></div>
+          </div>
+          <div class="math-formula" id="formulaImpactoTextil"></div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <!-- MODAL: BOTÓN "LO NECESITO" DESDE TARJETA DEL CATÁLOGO -->
+  <div id="modalLoNecesito" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitulo">
+    <div class="modal">
+      <h3 id="modalTitulo" style="color: var(--verde-oscuro); margin-bottom: 0.35rem;">
+        🤝 Lo necesito (Solicitud Anónima)
+      </h3>
+      <p id="modalItemNombre" style="font-size: 0.9rem; font-weight: 600; color: var(--naranja); margin-bottom: 0.6rem;"></p>
+      <div class="privacy-banner" style="margin-bottom: 0.8rem;">
+        Tu identidad no es visible para nadie en la aplicación. Solo se registra tu código y curso en la base para preparar la entrega.
+      </div>
+      <form id="formModalLoNecesito">
+        <input type="hidden" id="modalItemId" />
+        <div class="form-group">
+          <label for="modalUsuario">Código/Alias interno del estudiante:</label>
+          <input
+            type="text"
+            id="modalUsuario"
+            class="form-control"
+            placeholder="Ej: Iniciales + 3 números (AB-123)"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="modalCurso">Curso:</label>
+          <select id="modalCurso" class="form-control" required>
+            <option value="">Seleccionar curso...</option>
+            <option value="1° Año">1° Año</option>
+            <option value="2° Año">2° Año</option>
+            <option value="3° Año">3° Año</option>
+            <option value="4° Año">4° Año</option>
+            <option value="5° Año">5° Año</option>
+          </select>
+        </div>
+        <div style="display: flex; gap: 0.6rem; justify-content: flex-end; margin-top: 1rem;">
+          <button type="button" id="btnCerrarModal" class="btn btn-outline btn-sm">Cancelar</button>
+          <button type="submit" class="btn btn-accent btn-sm">Confirmar pedido anónimo</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: SUMAR DONACIÓN ANÓNIMA AL CATÁLOGO -->
+  <div id="modalDonar" class="modal-backdrop" role="dialog" aria-modal="true">
+    <div class="modal">
+      <h3 style="color: var(--verde-oscuro); margin-bottom: 0.35rem;">
+        🌱 Donar al Catálogo (Anónimo)
+      </h3>
+      <p style="font-size: 0.82rem; color: var(--texto-sec); margin-bottom: 0.8rem;">
+        Doná prendas de uniforme o útiles en buen estado. No se publica quién realiza la donación.
+      </p>
+      <form id="formDonarItem">
+        <div class="form-group">
+          <label for="donarCategoria">Categoría:</label>
+          <select id="donarCategoria" class="form-control" required>
+            <option value="uniforme">Uniforme (Remera, pantalón, campera)</option>
+            <option value="utiles">Útiles escolares (Cuadernos, biromes, carpetas)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="donarNombre">Artículo:</label>
+          <input
+            type="text"
+            id="donarNombre"
+            class="form-control"
+            placeholder="Ej: Remera uniforme Colegio N° 10"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="donarDetalle">Talle o detalle:</label>
+          <input
+            type="text"
+            id="donarDetalle"
+            class="form-control"
+            placeholder="Ej: Talle M / Cuaderno 48 hojas"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="donarStock">Cantidad disponible:</label>
+          <input type="number" id="donarStock" class="form-control" min="1" value="1" required />
+        </div>
+        <div style="display: flex; gap: 0.6rem; justify-content: flex-end; margin-top: 1rem;">
+          <button type="button" id="btnCerrarDonar" class="btn btn-outline btn-sm">Cancelar</button>
+          <button type="submit" class="btn btn-primary btn-sm">Guardar donación</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Notificación Toast -->
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <!-- Barra de navegación inferior pensada para celular -->
+  <nav class="bottom-nav" aria-label="Navegación principal">
+    <button class="nav-tab active" data-tab="catalogo">
+      <span class="nav-icon">👕</span>
+      <span>Catálogo</span>
+    </button>
+    <button class="nav-tab" data-tab="pedir">
+      <span class="nav-icon">🤝</span>
+      <span>Lo necesito</span>
+    </button>
+    <button class="nav-tab" data-tab="colectas">
+      <span class="nav-icon">🥫</span>
+      <span>Colectas</span>
+    </button>
+    <button class="nav-tab" data-tab="matematica">
+      <span class="nav-icon">📊</span>
+      <span>Matemática</span>
+    </button>
+  </nav>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
+
